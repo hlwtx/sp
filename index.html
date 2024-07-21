@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>随机视频</title>
+<style>
+ a{
+    text-decoration:none;
+    
+}
+
+video {
+    max-width: 100%;
+    max-height: 100%;
+    border: 1px solid #000;
+    border-radius: 10px;
+}  
+  
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#main {
+    height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#player {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+}
+
+#buttons {
+    height: 60px;
+    padding: 10px;
+}
+
+#switch,
+#next,
+#qh {
+    background: linear-gradient(45deg, #FAD961, #00BFFF);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    height: 40px;
+    padding: 0px 20px;
+    margin: 0px 5px;
+    border-radius: 20px;
+}
+</style>
+
+  <section id="main">
+  <video id="player" src="#" controls webkit-playsinline playsinline></video>
+</section>
+    
+  <section id="buttons">
+  <button id="switch">连续: 开</button>
+  <button id="next">下一个</button>
+  <button id="qh"><a href="#" style="color:#fff">留言板</a></button>
+</section>
+
+  <script>
+      (function (window, document) {
+          if (top != self) {
+              window.top.location.replace(self.location.href);
+          }
+          var get = function (id) {
+              return document.getElementById(id);
+          }
+          var bind = function (element, event, callback) {
+              return element.addEventListener(event, callback);
+          }
+          var auto = true;
+          var player = get('player');
+          var randomm = function () {
+              player.src = 'https://qqbyh.cn/api/aibei.php';
+              player.play();
+          }
+          bind(get('next'), 'click', randomm);
+          bind(player, 'error', function () {
+              randomm();
+          });
+          bind(get('switch'), 'click', function () {
+              auto = !auto;
+              this.innerText = '连续: ' + (auto ? '开' : '关');
+          });
+          bind(player, 'ended', function () {
+              if (auto) randomm();
+          });
+
+          var startY; 
+          var endY; 
+          var threshold = 50;
+
+          document.addEventListener('touchstart', function(e) {
+              startY = e.touches[0].clientY; 
+          });
+          document.addEventListener('touchend', function(e) {
+              endY = e.changedTouches[0].clientY; 
+              if (startY - endY > threshold) {
+                  window.location.reload();
+              }
+          });
+
+      })(window, document);
+</script>
+</body>
+</html>
